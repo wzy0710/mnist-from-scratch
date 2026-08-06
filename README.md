@@ -16,6 +16,69 @@ MNIST 是一个经典的手写数字图像数据集。每张图片都是 28×28 
 - 理解前向传播、反向传播和梯度下降的作用；
 - 保存训练好的模型，并使用模型识别新的手写数字。
 
+## 当前实现：读取和检查数据
+
+项目目前可以直接读取 MNIST 原始 IDX 文件，不依赖 PyTorch、TensorFlow 或 sklearn：
+
+- `mnist_data.py`：下载并解析图片与标签文件；
+- `inspect_mnist.py`：输出数据形状、像素类型和取值范围，并保存第一张训练图片；
+- `requirements.txt`：记录项目所需的 NumPy 和 Matplotlib 版本。
+
+读取后会得到四个 NumPy 数组：
+
+| 数组 | 形状 | 含义 |
+| --- | --- | --- |
+| `train_images` | `(60000, 28, 28)` | 60,000 张用于学习的训练图片 |
+| `train_labels` | `(60000,)` | 每张训练图片对应的正确数字 |
+| `test_images` | `(10000, 28, 28)` | 10,000 张用于最终检查的测试图片 |
+| `test_labels` | `(10000,)` | 每张测试图片对应的正确数字 |
+
+每个像素使用 `uint8` 类型保存，取值范围是 0～255。训练集像带答案的练习题，用来让模型学习；测试集像期末考试，用来检查模型对未参与训练的图片能否作出正确判断。
+
+准确率的计算方法是：
+
+```text
+准确率 = 预测正确的测试图片数量 ÷ 测试图片总数
+```
+
+例如 10,000 张测试图片中有 9,500 张预测正确，准确率就是 95%。
+
+## 在 Windows 上运行
+
+以下命令都需要在项目根目录中运行。
+
+1. 创建项目专用的虚拟环境：
+
+   ```powershell
+   py -m venv .venv
+   ```
+
+2. 启用虚拟环境：
+
+   ```powershell
+   .\.venv\Scripts\Activate.ps1
+   ```
+
+   如果 PowerShell 提示禁止运行脚本，先为当前窗口临时允许本地脚本，再重新启用：
+
+   ```powershell
+   Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
+   ```
+
+3. 根据依赖清单安装工具：
+
+   ```powershell
+   python -m pip install -r requirements.txt
+   ```
+
+4. 下载、读取并检查 MNIST：
+
+   ```powershell
+   python inspect_mnist.py
+   ```
+
+程序会把原始数据保存在 `data/mnist/`，并把第一张训练图片保存为 `outputs/mnist_sample.png`。这两个目录都不会提交到 GitHub，再次运行时会直接复用已经下载的数据。
+
 ## 开发计划
 
 1. **认识数据**：下载并读取 MNIST，查看图片、标签和数据形状，理解训练集与测试集的区别。
