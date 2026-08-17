@@ -107,6 +107,13 @@ def read_labels(path: Path) -> np.ndarray:
     return labels
 
 
+def prepare_images(images: np.ndarray) -> np.ndarray:
+    """Flatten images and normalize their pixels to the range 0.0 to 1.0."""
+
+    image_count = images.shape[0]
+    return images.reshape(image_count, -1).astype(np.float32) / 255.0
+
+
 def load_mnist(
     data_directory: Path = DATA_DIRECTORY,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
